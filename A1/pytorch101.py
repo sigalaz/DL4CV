@@ -140,7 +140,14 @@ def multiples_of_ten(start, stop):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x = []
+  for i in torch.arange(start, stop):
+  	if (i%10 == 0):
+  		x.append(i)
+
+  x = torch.tensor(x, dtype=torch.float64) 
+
+
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -170,10 +177,10 @@ def slice_indexing_practice(x):
   """
   assert x.shape[0] >= 3
   assert x.shape[1] >= 5
-  last_row = None
-  third_col = None
-  first_two_rows_three_cols = None
-  even_rows_odd_cols = None
+  last_row = x[-1, :]
+  third_col = x[:, 2:3]
+  first_two_rows_three_cols = x[0:2, 0:3]
+  even_rows_odd_cols = x[::2, 1::2] 
   #############################################################################
   #                    TODO: Implement this function                          #
   #############################################################################
@@ -218,7 +225,10 @@ def slice_assignment_practice(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x[0:2, 0:2] = torch.tensor([[0,1], [0,1]])
+  x[0:2, 2:6] = torch.full((2,4), 2)
+  x[2:4,0:4] = torch.tensor([[3,4,3,4 ], [3,4,3,4]])
+  x[2:4,4:6 ] = torch.full((2,2), 5)
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -245,7 +255,8 @@ def shuffle_cols(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  idx = [0,0,2,1]
+  y = x[:,idx]
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
