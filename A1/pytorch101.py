@@ -24,7 +24,7 @@ def create_sample_tensor():
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x = torch.tensor([[0, 10, 0],[100, 0, 0]])
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -58,7 +58,9 @@ def mutate_tensor(x, indices, values):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  for i in range(len(values)):
+  	x[indices[i][0], indices[i][1]] = values[i]
+
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -87,7 +89,11 @@ def count_tensor_elements(x):
   #   You CANNOT use the built-in functions torch.numel(x) or x.numel().      #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x_size = x.size()
+  num_elements = 1
+  for i in x_size:
+  	num_elements *= i
+
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -109,7 +115,7 @@ def create_tensor_of_pi(M, N):
   #       TODO: Implement this function. It should take one line.             #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x = torch.full((M,N), 3.14)
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
