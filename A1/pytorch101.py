@@ -282,7 +282,8 @@ def reverse_rows(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  idx0 = [(x.shape[0] - i -1) for i in torch.arange(x.shape[0])]
+  y = x[idx0, :]
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -309,7 +310,9 @@ def take_one_elem_per_col(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  idx0 = torch.tensor([1, 0, 3])
+  idx1 = torch.arange(3) 
+  y = x[idx0, idx1]
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -335,7 +338,7 @@ def count_negative_entries(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  num_neg = len(x[x<0])
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -360,7 +363,11 @@ def make_one_hot(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  y = torch.zeros(len(x), max(x)+1)
+  for idx, i in enumerate(y):
+    y[idx, x[idx]] = 1
+
+
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -393,7 +400,7 @@ def reshape_practice(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  y = x.view(2, 3, 4).transpose(1,2)
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
