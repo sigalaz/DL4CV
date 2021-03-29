@@ -400,7 +400,8 @@ def reshape_practice(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  y = x.view(2, 3, 4).transpose(1,2)
+  
+  y = x.view(2,3,4).transpose(1,2).reshape(8,3).transpose(0,1)
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -433,7 +434,12 @@ def zero_row_min(x):
   - y: Tensor of shape (M, N) that is a copy of x, except the minimum value
        along each row is replaced with 0.
   """
-  y = None
+  y = x.clone()
+  _ , row_min_idx = y.min(dim=1)
+  row = torch.arange(0, len(row_min_idx))
+  y[row, row_min_idx] = 0
+
+
   #############################################################################
   #                    TODO: Implement this function                          #
   #############################################################################
@@ -471,7 +477,19 @@ def batched_matrix_multiply(x, y, use_loop=True):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  l = []
+  if (use_loop):
+  	batch_size, _, _ = x.shape
+  	for i in torch.arange(0, batch_size):
+  		l.append(torch.mm(x[i], y[i]))
+  	z = torch.stack(l)
+
+  else:
+  	z = torch.bmm(x, y)
+
+
+  		
+
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
