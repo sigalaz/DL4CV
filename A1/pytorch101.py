@@ -58,9 +58,12 @@ def mutate_tensor(x, indices, values):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
+  
   for i in range(len(values)):
   	x[indices[i][0], indices[i][1]] = values[i]
 
+
+  
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -524,7 +527,15 @@ def normalize_columns(x):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  y = torch.tensor([2,3,4])
+
+
+  y_mean = torch.mm(torch.t(x), torch.ones(len(x),1)) / len(x)
+  
+  y_min_y_mean = torch.t(x) - y_mean
+  y_std = torch.sqrt(torch.mm(y_min_y_mean**2, torch.ones(len(x), 1)) / (len(x)-1))
+
+  y = ((torch.t(x) - y_mean)/ y_std).t()
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
@@ -569,7 +580,10 @@ def mm_on_gpu(x, w):
   #                    TODO: Implement this function                          #
   #############################################################################
   # Replace "pass" statement with your code
-  pass
+  x_gpu = x.cuda()
+  w_gpu = w.cuda()
+  y_gpu = x_gpu.mm(w_gpu).cuda()
+  y = y_gpu.cpu()
   #############################################################################
   #                            END OF YOUR CODE                               #
   #############################################################################
