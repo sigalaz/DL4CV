@@ -59,7 +59,14 @@ def compute_distances_two_loops(x_train, x_test):
   # functions from torch.nn or torch.nn.functional.                            #
   ##############################################################################
   # Replace "pass" statement with your code
-  pass
+  x_train_flattenned = x_train.view(num_train, -1)
+  x_test_flattened = x_test.view(num_test, -1)
+
+  for i, train_sample in enumerate(x_train_flattenned):
+  	for j, test_sample in enumerate(x_test_flattened):
+  		dists[i,j] = torch.sqrt(torch.sum((test_sample - train_sample)**2))
+
+
   ##############################################################################
   #                             END OF YOUR CODE                               #
   ##############################################################################
@@ -102,7 +109,18 @@ def compute_distances_one_loop(x_train, x_test):
   # functions from torch.nn or torch.nn.functional.                            #
   ##############################################################################
   # Replace "pass" statement with your code
-  pass
+  x_train_flattenned = x_train.view(num_train, -1)
+  x_test_flattened   = x_test.view(num_test, -1)
+
+  for i, train_sample in enumerate(x_train_flattenned):
+  	dists[i, :] = torch.sqrt((torch.sum(x_test_flattened - train_sample.t(), dim=1)**2))
+  	
+
+  
+  	
+
+  #print(p.shape)
+
   ##############################################################################
   #                             END OF YOUR CODE                               #
   ##############################################################################
