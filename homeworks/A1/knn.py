@@ -106,7 +106,7 @@ def compute_distances_one_loop(x_train: torch.Tensor, x_test: torch.Tensor):
     x_train_flattened = x_train.view(num_train, -1)
     x_test_flattened = x_test.view(num_test, -1)
 
-    print(x_test_flattened.shape)
+    # print(x_test_flattened.shape)
     for train_id, train_img in enumerate(x_train_flattened):
         diff = torch.sqrt(
             torch.sum(((x_test_flattened - train_img)**2), dim=1))
@@ -225,8 +225,9 @@ def predict_labels(dists: torch.Tensor, y_train: torch.Tensor, k: int = 1):
         unique_labels, count = torch.unique(
             k_nearest_labels, return_counts=True)
         #print(f'count {count}')
-        #print(f'uniquye labels: {unique_labels}')
-        y_pred[i] = unique_labels[0]
+        #print(f'unique labels: {unique_labels}')
+
+        y_pred[i] = unique_labels[torch.argmax(count)]
 
     #print(f'y_pred: {y_pred}')
 
@@ -260,18 +261,16 @@ class KnnClassifier:
         # `self.x_train` and `self.y_train`, accordingly.                    #
         ######################################################################
         # Replace "pass" statement with your code
-
-        if torch.cuda.is_available():
-            print('PyTorch can use GPUs!')
-        else:
-            print('PyTorch cannot use GPUs.')
-
+        '''
         if torch.cuda.is_available():
             self.x_train = x_train.cuda()
             self.y_train = y_train.cuda()
         else:
             self.x_train = x_train
             self.y_train = y_train
+        '''
+        self.x_train = x_train
+        self.y_train = y_train
 
         ######################################################################
         #                         END OF YOUR CODE                           #
@@ -294,7 +293,9 @@ class KnnClassifier:
         # to predict output labels.                                          #
         ######################################################################
         # Replace "pass" statement with your code
-        dists = compute_distances_one_loop(self.x_train, x_test.cuda())
+
+        # TODO: my loop solution is aparently too memory demmanding, because the program crashes
+        dists = compute_distances_one_loop(self.x_train, x_test)
 
         y_test_pred = predict_labels(dists, self.y_train, k)
         ######################################################################
@@ -396,13 +397,23 @@ def knn_cross_validate(
         current_test_fold = 0
         for i, fold in enumerate(x_train_folds):
             current_x_train_fold = torch.cat(
-                x_train_folds[:i], x_train_folds[i:])
-            current_y_train_fold = torch.cat(
-                y_train_folds[:i], y_train_folds[i:])
-            current_test_fold = x_train_folds[i]
+                (*x_train_folds[:i], *x_train_folds[i+1:]), 0)
 
-            y_pred = KnnClassifier(current_x_train_fold, current_y_train_fold).predict(
-                current_test_fold, k_value)
+            current_y_train_fold = torch.cat(
+                (*y_train_folds[:i], *y_train_folds[i+1:]), 0)
+
+            current_x_test_fold = x_train_folds[i]
+            current_y_test_fold = y_train_folds[i]
+
+            current_knn = KnnClassifier(
+                current_x_train_fold, current_y_train_fold)
+            current_accuracy = current_knn.check_accuracy(
+                current_x_test_fold, current_y_test_fold, k_value)
+
+            current_k_results.append(current_accuracy)
+            # current_k_results.append(y_pred)
+
+        k_to_accuracies[k_value] = current_k_results
 
     ##########################################################################
     #                           END OF YOUR CODE                             #
