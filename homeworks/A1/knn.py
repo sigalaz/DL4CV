@@ -158,11 +158,10 @@ def compute_distances_no_loops(x_train: torch.Tensor, x_test: torch.Tensor):
     #       and a matrix multiply.                                           #
     ##########################################################################
     # Replace "pass" statement with your code
-    #x_train_broadcasted = x_train.view(num_train, 1, -1)
-    #x_test_broadcasted = x_test.view(1, num_test, -1)
+    #
 
-    # TODO : make a more efficient solution, for some reason this solution is slower than one loop version.
-    # Nevertheless, this is only true on cpu tensors, because on gpu the no loop implementation is considerable faster (I have an intel core i9 and 3090 gpu )
+   # TODO : make a more efficient solution, for some reason this solution is slower than one loop version.
+   # Nevertheless, this is only true on cpu tensors, because on gpu the no loop implementation is considerable faster (I have an intel core i9 and 3090 gpu )
 
     dists = torch.sqrt(
         torch.sum((x_train.view(num_train, 1, -1) - x_test.view(1, num_test, -1))**2, dim=2))
@@ -261,14 +260,14 @@ class KnnClassifier:
         # `self.x_train` and `self.y_train`, accordingly.                    #
         ######################################################################
         # Replace "pass" statement with your code
-        '''
+
         if torch.cuda.is_available():
             self.x_train = x_train.cuda()
             self.y_train = y_train.cuda()
         else:
             self.x_train = x_train
             self.y_train = y_train
-        '''
+
         self.x_train = x_train
         self.y_train = y_train
 
@@ -442,7 +441,21 @@ def knn_get_best_k(k_to_accuracies: Dict[int, List]):
     # the value of k that has the highest mean accuracy accross all folds.   #
     ##########################################################################
     # Replace "pass" statement with your code
-    pass
+
+    # best_k = torch.max((torch.mean(mean_acuracies for ))
+    # mean_aacuracies = torch.mean(x for )
+    mean_accuracies = {}
+    best_accuracy = 0
+    for k in k_to_accuracies:
+        current_mean_accuracy = torch.mean(
+            torch.tensor(k_to_accuracies[k]))
+        print(current_mean_accuracy)
+
+        if current_mean_accuracy > best_accuracy:
+            best_accuracy = current_mean_accuracy
+            best_k = k
+    print(f'best k is: {best_k}')
+
     ##########################################################################
     #                           END OF YOUR CODE                             #
     ##########################################################################
